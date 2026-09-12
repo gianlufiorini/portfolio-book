@@ -13,21 +13,18 @@
 # Colours: palette holds named colours; the semantic slots (primary,
 # foreground, background, …) pick which ones mean what. Any `"#hex"` is fair
 # game. Rule of thumb — keep ~3 accents + one ink + one paper.
-
 color:
   palette:
-    teal:    "#5CCCCA"   # primary accent (assignments / structure)
-    mint:   "#56D17C"   # secondary accent (highlights / results)
-    tangerine:  "#1A9598"   # tertiary accent (links / emphasis)
-    ink:     "#80706C"   # near-black ink for body text
-    paper:   "#F2EEE9"   # warm off-white paper for the page
-    white:   "#FFFFFF"
-  primary: teal
-  secondary: tangerine
-  tertiary: mint
-  foreground: ink
-  background: paper
-
+    lightplum:    "#8F1E6C"
+    lightindigo:  "#341565"
+    lightgold:    "#6F4D15"
+    lightpaper:   "#F5F6F1"
+    lightink:     "#171D1D"
+    darkplum:     "#D434A1"
+    darkindigo:   "#6027BC"
+    darkgold:     "#6027BC"
+    darkpaper:    "#121717"
+    darkink:      "#F5F6F1"
 # Typography: swap the fonts for ones you like (Google Fonts via `source:
 # google`, or drop `source:` for the browser defaults). `monospace` styles the
 # code blocks your EDA chapter is full of.

@@ -27,7 +27,10 @@ format:
     # in the two files beside this one:
     #   - `_brand.yml`  → colours + fonts (edit the hex values, done)
     #   - `styles.scss` → anything structural (see the file's comments)
-    theme: cosmo
+    theme:
+      light: [default, styles-light.scss]
+      dark: [default, styles-dark.scss]
+
     css: styles.scss
     toc: true
     toc-title: "In this chapter"

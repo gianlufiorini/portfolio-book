@@ -1,0 +1,83 @@
+/* ─── Your portfolio's stylesheet (optional) ────────────────────────────────
+ *
+ * `_brand.yml` gives you colour/typography control with zero CSS knowledge —
+ * start there. This file is for the *structural* stuff `_brand.yml` can't
+ * express: spacing, layout, custom components, tiny QoL tweaks.
+ *
+ * How it's wired: `_quarto.yml` has `format.html.css: styles.scss`. Quarto
+ * compiles the SCSS for you — edit this file, re-render, done. Everything is
+ * optional; the file ships commented-out so it's a no-op until you uncomment.
+ *
+ * To find what to target, right-click any element in your rendered book and
+ * *Inspect* (Developer Tools), or open the book's compiled CSS. The selectors
+ * below are the common ones for a Quarto `html` book.
+ */
+
+/*-- scss:defaults --*/
+/* 1. Define your brand variables */
+$darkplum:      #DB57B1;
+$darkindigo:    #7E45D9;
+$darkgold:      #DA9B36;
+$darkpaper:     #121717;
+$darkink:       #F5F6F1;
+
+/* 2. Map them to Quarto/Bootstrap theme variables */
+$body-bg:       $darkpaper;
+$body-color:    $darkink;
+$primary:       $darkplum;
+$secondary:     $darkindigo;
+$warning:       $darkgold;
+$code-block-bg: #1e2424; /* A slightly lighter dark gray/teal for the block background */
+$code-color:    #E0E0E0; /* Make inline code text light and readable */
+
+/*-- scss:rules --*/
+/* Fixes link behavior specifically for Dark Mode */
+a {
+  color: $darkplum;
+  &:hover { color: $darkindigo; }
+}
+
+/* Automatic structural assignments for your Gold Accent */
+blockquote {
+  border-left: 4px solid $darkgold !important;
+}
+
+.callout-warning, .callout-important {
+  border-left-color: $darkgold !important;
+  .callout-icon-container { color: $darkgold !important; }
+}
+
+.accent-gold {
+  color: $darkgold !important;
+}
+
+
+
+/* Example — nudge the sidebar width so long filenames don't wrap
+ *
+ * .sidebar {
+ *   width: 300px;
+ * }
+ */
+
+/* Example — give code blocks a light tint so they read like a console
+ *
+ * div.sourceCode {
+ *   background-color: #faf7f0;
+ *   border-radius: 6px;
+ * }
+ */
+
+/* Example — make in-line code use the indigo accent
+ *
+ * code {
+ *   color: #4A5899;
+ * }
+ */
+
+/* Example — rounded cards / nicer figure frames
+ *
+ * .figure, figure img {
+ *   border-radius: 8px;
+ * }
+ */
