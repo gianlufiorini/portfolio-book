@@ -16,15 +16,15 @@
 
 color:
   palette:
-    teal:    "#2E7D6B"   # primary accent (assignments / structure)
-    amber:   "#E8A33D"   # secondary accent (highlights / results)
-    indigo:  "#4A5899"   # tertiary accent (links / emphasis)
-    ink:     "#17251F"   # near-black ink for body text
-    paper:   "#F1EEE6"   # warm off-white paper for the page
+    teal:    "#5CCCCA"   # primary accent (assignments / structure)
+    mint:   "#56D17C"   # secondary accent (highlights / results)
+    tangerine:  "#1A9598"   # tertiary accent (links / emphasis)
+    ink:     "#80706C"   # near-black ink for body text
+    paper:   "#F2EEE9"   # warm off-white paper for the page
     white:   "#FFFFFF"
   primary: teal
-  secondary: amber
-  tertiary: indigo
+  secondary: tangerine
+  tertiary: mint
   foreground: ink
   background: paper
 
