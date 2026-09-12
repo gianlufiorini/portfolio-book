@@ -28,20 +28,11 @@ color:
 # Typography: swap the fonts for ones you like (Google Fonts via `source:
 # google`, or drop `source:` for the browser defaults). `monospace` styles the
 # code blocks your EDA chapter is full of.
-#
-#   typography:
-#     fonts:
-#       - family: Lora        # example — uncomment to try
-#         source: google
-#         weight: [400, 600]
-#     base:
-#       family: Lora
-#     headings:
-#       family: Lora
-#       weight: 600
-#     monospace:
-#       family: "Fira Code"
-#       source: google
+typography:
+  fonts:
+    - family: "EB Garamond"
+      source: google
+  base: "Charis SIL"
 
 # Meta: identity that shows in the browser tab / share cards. Feel free to
 # trim or extend.
