@@ -1,8 +1,19 @@
 ---
 title: "Chapter 1 · My EDA project"
-author: "Your Name"
+author: "Gianluca Fiorini"
 date: today
 ---
+
+```{r}
+#| echo: false
+#| message: false
+#| include: false
+
+library(janitor)
+library(skimr)
+library(tidyverse)
+
+```
 
 > **How to fill this chapter in**
 > This is your main portfolio piece. The numbered sections below follow the
@@ -19,12 +30,13 @@ date: today
 > Everything between the `TODO` markers below is a template to replace with
 > your own content.
 
-## The question
+## The Question
 
-<!-- TODO: In a sentence or two, what question are you trying to answer with this dataset?  -->
+What are the main factors dr
 
-## Getting the data
+## Getting the Data
 
+The data was sourced for the [government of Alberta's open data website](https://open.alberta.ca/opendata/chemical-monitoring-in-local-foods-mercury-in-fish).
 The data is sourced **by code** from an open-data portal of your choice. Because
 the download lives inside the document, it is recorded in the analysis itself;
 anyone who re-renders this document gets the same data and the same results.
