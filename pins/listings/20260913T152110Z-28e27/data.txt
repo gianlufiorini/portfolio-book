@@ -1,0 +1,10 @@
+file: listings.csv
+file_size: 30444698
+pin_hash: 28e2730398d50388
+type: csv
+title: 'listings: a pinned 12217 x 90 data frame'
+description: ~
+tags: ~
+urls: ~
+created: 20260913T152110Z
+api_version: 1

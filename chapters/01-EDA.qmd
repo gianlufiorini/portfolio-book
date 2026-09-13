@@ -32,7 +32,12 @@ library(tidyverse)
 
 ## The Question
 
-What are the main factors dr
+Airbnb is a platform that connects travellers looking for short-term lodgement with property owners looking to rent out their properties for a short time. Each listing on the website provides several types of information about the lodgement; these inlude the price per night, the type of property (entire home, private room, shared room), the size of the property and the number of people it can host, the services available, a short description, information on the owner,etc. ...
+
+This analysis will focus on listings around Bordeaux, (Nouvelle-Aquitaine, France), and aim to answer two main questions:
+
+1.  Are there differences features and prices of listings across different neighborhoods?
+1.  What are the main factors influencing the price of a listing?
 
 ## Getting the Data
 
@@ -53,8 +58,8 @@ use the one that fits your portal:
 ```{r}
 #| label: setup
 #| message: false
-# Load what you use. {rdatagouv} only if you're on data.gouv.fr and want it.
-# library(rdatagouv)    # search / download datasets from data.gouv.fr
+#| echo: false
+library(tidyverse)
 library(janitor)        # clean column names, tabulate with tabyl()
 library(naniar)         # visualise missing values
 library(skimr)          # one-line data summary with skim()
@@ -63,12 +68,31 @@ library(skimr)          # one-line data summary with skim()
 ```{r}
 #| label: download
 #| message: false
-# TODO: replace with the code you wrote in the Session-2 lab.
-# Option A — data.gouv.fr via {rdatagouv}:
-# ds <- get_dataset("my-dataset-slug"); url <- ds$resources$url[1]
-# Option B — any portal by direct URL:
-# url <- "https://www.example-portal.org/.../my-data.csv"
-# download.file(url, "data/my-data.csv")
+#| echo: false
+#Creating directory to host the data, if it does not already exist
+
+board <- pins::board_folder("pins/", versioned = TRUE)
+
+if (!pins::pin_exists(board, "listings")) {
+  if (!dir.exists("data")) {
+    dir.create("data")
+  }
+
+  #Sourcing the data from the internet
+  download.file(url = "https://data.insideairbnb.com/france/nouvelle-aquitaine/bordeaux/2026-06-22/data/listings.csv.gz",
+  destfile = 'data/listings.csv.gz')
+
+  dat <- read_csv(gzfile("data/listings.csv.gz"))
+
+  pins::board_folder("pins/", versioned = T)
+
+  board <- pins::board_folder("pins/", versioned = TRUE)
+  pins::pin_write(board, dat, "listings", type = "csv")
+}
+
+rm(list = ls())
+board <- pins::board_folder("pins/", versioned = TRUE)
+listings <- pins::pin_read(board, "listings")
 ```
 
 > **Optionally pin the fetched copy** with `{pins}` so the chapter reads from a
