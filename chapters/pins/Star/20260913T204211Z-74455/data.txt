@@ -1,0 +1,10 @@
+file: Star.csv
+file_size: 2954071
+pin_hash: 74455e04447176a0
+type: csv
+title: 'Star: a pinned 11598 x 47 data frame'
+description: ~
+tags: ~
+urls: ~
+created: 20260913T204211Z
+api_version: 1

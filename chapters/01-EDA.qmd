@@ -11,8 +11,8 @@ date: today
 
 library(janitor)
 library(skimr)
+library(naniar)
 library(tidyverse)
-
 ```
 
 > **How to fill this chapter in**
@@ -32,16 +32,11 @@ library(tidyverse)
 
 ## The Question
 
-Airbnb is a platform that connects travellers looking for short-term lodgement with property owners looking to rent out their properties for a short time. Each listing on the website provides several types of information about the lodgement; these inlude the price per night, the type of property (entire home, private room, shared room), the size of the property and the number of people it can host, the services available, a short description, information on the owner,etc. ...
-
-This analysis will focus on listings around Bordeaux, (Nouvelle-Aquitaine, France), and aim to answer two main questions:
-
-1.  Are there differences features and prices of listings across different neighborhoods?
-1.  What are the main factors influencing the price of a listing?
-
 ## Getting the Data
+"Stop and frisk" is a practice of the New York City Police Department (NYPD) where officers temporarily detain, question, and search civilians on the streets for weapons or contraband based on reasonable suspicion. The NYPD publishes records on stop and frisk occurrences yearly on [their website](https://www.nyc.gov/site/nypd/stats/reports-analysis/stopfrisk.page).
 
-The data was sourced for the [government of Alberta's open data website](https://open.alberta.ca/opendata/chemical-monitoring-in-local-foods-mercury-in-fish).
+The practice has been often criticized over the years for being ineffective (in the sense it leads to few arrests), and for disproportionately be used on people 
+
 The data is sourced **by code** from an open-data portal of your choice. Because
 the download lives inside the document, it is recorded in the analysis itself;
 anyone who re-renders this document gets the same data and the same results.
@@ -56,62 +51,33 @@ use the one that fits your portal:
   download link.
 
 ```{r}
-#| label: setup
-#| message: false
-#| echo: false
-library(tidyverse)
-library(janitor)        # clean column names, tabulate with tabyl()
-library(naniar)         # visualise missing values
-library(skimr)          # one-line data summary with skim()
-```
-
-```{r}
 #| label: download
 #| message: false
 #| echo: false
+#| warning: false
 #Creating directory to host the data, if it does not already exist
 
 board <- pins::board_folder("pins/", versioned = TRUE)
 
-if (!pins::pin_exists(board, "listings")) {
-  if (!dir.exists("data")) {
-    dir.create("data")
-  }
+if (!pins::pin_exists(board, 'Star')) {
 
   #Sourcing the data from the internet
-  download.file(url = "https://data.insideairbnb.com/france/nouvelle-aquitaine/bordeaux/2026-06-22/data/listings.csv.gz",
-  destfile = 'data/listings.csv.gz')
+  data("STAR", package = "AER")
 
-  dat <- read_csv(gzfile("data/listings.csv.gz"))
-
-  pins::board_folder("pins/", versioned = T)
-
-  board <- pins::board_folder("pins/", versioned = TRUE)
-  pins::pin_write(board, dat, "listings", type = "csv")
+  pins::pin_write(board, STAR, "Star", type = "csv")
 }
 
-rm(list = ls())
-board <- pins::board_folder("pins/", versioned = TRUE)
-listings <- pins::pin_read(board, "listings")
+rm(list = c('STAR'))
+
+Star <- pins::pin_read(board, "Star")
 ```
-
-> **Optionally pin the fetched copy** with `{pins}` so the chapter reads from a
-> versioned local board instead of hitting the network on every render:
->
-> ```r
-> board <- pins::board_folder("pins/", versioned = TRUE)
-> pins::pin_write(board, dat, "my-data", type = "csv")
-> dat    <- pins::pin_read(board, "my-data")
-> ```
-
 
 ## A first look
 
 ```{r}
 #| label: skim
 #| fig-cap: "A one-line summary of the dataset."
-# The skim() output gives you type, missingness and distributions at a glance.
-# skim(dat)
+skim(Star)
 ```
 
 ```{r}
