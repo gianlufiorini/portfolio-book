@@ -15,6 +15,56 @@ library(naniar)
 library(tidyverse)
 ```
 
+```{r}
+#| label: download
+#| message: false
+#| echo: false
+#| warning: false
+#Creating directory to host the data, if it does not already exist
+
+board <- pins::board_folder("pins/", versioned = TRUE)
+
+if (!pins::pin_exists(board, 'Star')) {
+
+  #Sourcing the data from the internet
+  data("STAR", package = "AER")
+
+  pins::pin_write(board, STAR, "Star", type = "csv")
+
+  rm(list = c('STAR'))
+}
+
+Star <- pins::pin_read(board, "Star")
+
+
+if (!pins::pin_exists(board, 'star')) {
+  #The dataset is provided in wide format but it should be used in long format.
+  #To that end we can use the code by the authors of the package.
+
+  ## reshape data from wide into long format
+  ## 1. variables and their levels
+  nam <- c("star", "read", "math", "lunch", "school", "degree", "ladder",
+    "experience", "tethnicity", "system", "schoolid")
+  lev <- c("k", "1", "2", "3")
+  ## 2. reshaping
+  star <- reshape(Star, idvar = "id", ids = row.names(Star),
+    times = lev, timevar = "grade", direction = "long",
+    varying = lapply(nam, function(x) paste(x, lev, sep = "")))
+  ## 3. improve variable names and type
+  names(star)[5:15] <- nam
+  star$id <- factor(star$id)
+  star$grade <- factor(star$grade, levels = lev, labels = c("kindergarten", "1st", "2nd", "3rd"))
+  rm(nam, lev)
+
+  pins::pin_write(board, star, "star", type = "csv")
+
+  rm(star)
+}
+
+star <- pins::pin_read(board,'star')
+
+```
+
 > **How to fill this chapter in**
 > This is your main portfolio piece. The numbered sections below follow the
 > **IMRAD** structure of research: question ≈ *introduction*, getting the
@@ -31,6 +81,13 @@ library(tidyverse)
 > your own content.
 
 ## The Question
+The Student-Teacher Achievement Ratio (STAR) study was a randomized controlled trial conducted in Tennessee elementary schools between the years 1985 and 1989. The main aim of the trial was to understand the impact of class size on students' scores in reading and math to guide policymaking. The study involved `{r} star$id |> unique() |> length()` students across `{r} star$schoolid |> unique() |> length()` schools, and concerned grades K-3. In each school participating in the study, children where assigned randomly to one of three possible class types: "small", "regular", and "regular-with-aide". Small classes contained between 13 and 17 students, while regular classes contained between 22 and 25; regular-with-aide classses contained the same number of students as a regular class but were additionally provided with a full-time paid teaching assistant on top of the regular teacher. Not all students involved in the programme were involved in the study for the entire period; the dataset includes students who have spent at least a year in the programme.
+
+ On top of students' class type and test scores, additional variables were also recorded:
+ 
+ - For teachers: gender, ethnicity, highest academic qualification, years of experience, and position on the career ladder.
+ - For pupils: gender, ethnicity, year and quarter of birth, and whether they qualified for free lunch.
+ - For schools: type ("inner-city", urban", "suburban", "rural").
 
 ## Getting the Data
 "Stop and frisk" is a practice of the New York City Police Department (NYPD) where officers temporarily detain, question, and search civilians on the streets for weapons or contraband based on reasonable suspicion. The NYPD publishes records on stop and frisk occurrences yearly on [their website](https://www.nyc.gov/site/nypd/stats/reports-analysis/stopfrisk.page).
@@ -50,34 +107,12 @@ use the one that fits your portal:
 - **Any portal by URL**: `download.file()` works with any portal's direct
   download link.
 
-```{r}
-#| label: download
-#| message: false
-#| echo: false
-#| warning: false
-#Creating directory to host the data, if it does not already exist
-
-board <- pins::board_folder("pins/", versioned = TRUE)
-
-if (!pins::pin_exists(board, 'Star')) {
-
-  #Sourcing the data from the internet
-  data("STAR", package = "AER")
-
-  pins::pin_write(board, STAR, "Star", type = "csv")
-}
-
-rm(list = c('STAR'))
-
-Star <- pins::pin_read(board, "Star")
-```
-
 ## A first look
 
 ```{r}
 #| label: skim
 #| fig-cap: "A one-line summary of the dataset."
-skim(Star)
+skim(star)
 ```
 
 ```{r}
