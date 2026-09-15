@@ -1,0 +1,10 @@
+file: trentinoairbnb.csv
+file_size: 27233023
+pin_hash: a0029b50ac0c9d29
+type: csv
+title: 'trentinoairbnb: a pinned 10084 x 90 data frame'
+description: ~
+tags: ~
+urls: ~
+created: 20260915T112133Z
+api_version: 1

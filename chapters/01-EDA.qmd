@@ -13,6 +13,7 @@ library(janitor)
 library(skimr)
 library(naniar)
 library(tidyverse)
+library(gt)
 ```
 
 ```{r}
@@ -24,44 +25,32 @@ library(tidyverse)
 
 board <- pins::board_folder("pins/", versioned = TRUE)
 
-if (!pins::pin_exists(board, 'Star')) {
+if (!pins::pin_exists(board, 'trentinoairbnb')) {
 
-  #Sourcing the data from the internet
-  data("STAR", package = "AER")
+  if (!dir.exists("data/")){
+    dir.create("data/")
+  }
 
-  pins::pin_write(board, STAR, "Star", type = "csv")
+  # Define a standard browser User-Agent
+  headers <- c("User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
 
-  rm(list = c('STAR'))
+# Download the file using the header
+  download.file(
+    url = "https://data.insideairbnb.com/italy/trentino-alto-adige-s%C3%BCdtirol/trentino/2026-06-30/data/listings.csv.gz",
+    destfile = "data/listings.csv.gz",
+    headers = headers,
+    mode = 'wb'
+  )
+
+
+  dat <- read_csv(gzfile("data/listings.csv.gz"))
+
+  pins::pin_write(board, dat, "trentinoairbnb", type = "csv")
+  
+  rm(list = c("dat", "headers"))
 }
 
-Star <- pins::pin_read(board, "Star")
-
-
-if (!pins::pin_exists(board, 'star')) {
-  #The dataset is provided in wide format but it should be used in long format.
-  #To that end we can use the code by the authors of the package.
-
-  ## reshape data from wide into long format
-  ## 1. variables and their levels
-  nam <- c("star", "read", "math", "lunch", "school", "degree", "ladder",
-    "experience", "tethnicity", "system", "schoolid")
-  lev <- c("k", "1", "2", "3")
-  ## 2. reshaping
-  star <- reshape(Star, idvar = "id", ids = row.names(Star),
-    times = lev, timevar = "grade", direction = "long",
-    varying = lapply(nam, function(x) paste(x, lev, sep = "")))
-  ## 3. improve variable names and type
-  names(star)[5:15] <- nam
-  star$id <- factor(star$id)
-  star$grade <- factor(star$grade, levels = lev, labels = c("kindergarten", "1st", "2nd", "3rd"))
-  rm(nam, lev)
-
-  pins::pin_write(board, star, "star", type = "csv")
-
-  rm(star)
-}
-
-star <- pins::pin_read(board,'star')
+trentinoairbnb <- pins::pin_read(board, "trentinoairbnb")
 
 ```
 
@@ -81,27 +70,24 @@ star <- pins::pin_read(board,'star')
 > your own content.
 
 ## The Question
-The Student-Teacher Achievement Ratio (STAR) study was a randomized controlled trial conducted in Tennessee elementary schools between the years 1985 and 1989. The main aim of the trial was to understand the impact of class size on students' scores in reading and math to guide policymaking. The study involved `{r} star$id |> unique() |> length()` students across `{r} star$schoolid |> unique() |> length()` schools, and concerned grades K-3. In each school participating in the study, children where assigned randomly to one of three possible class types: "small", "regular", and "regular-with-aide". Small classes contained between 13 and 17 students, while regular classes contained between 22 and 25; regular-with-aide classses contained the same number of students as a regular class but were additionally provided with a full-time paid teaching assistant on top of the regular teacher. Not all students involved in the programme were involved in the study for the entire period; the dataset includes students who have spent at least a year in the programme.
-
- On top of students' class type and test scores, additional variables were also recorded:
- 
- - For teachers: gender, ethnicity, highest academic qualification, years of experience, and position on the career ladder.
- - For pupils: gender, ethnicity, year and quarter of birth, and whether they qualified for free lunch.
- - For schools: type ("inner-city", urban", "suburban", "rural").
+Objectives: understand the main drivers of price and how prices differ across different areas.
 
 ## Getting the Data
-"Stop and frisk" is a practice of the New York City Police Department (NYPD) where officers temporarily detain, question, and search civilians on the streets for weapons or contraband based on reasonable suspicion. The NYPD publishes records on stop and frisk occurrences yearly on [their website](https://www.nyc.gov/site/nypd/stats/reports-analysis/stopfrisk.page).
 
-The practice has been often criticized over the years for being ineffective (in the sense it leads to few arrests), and for disproportionately be used on people 
+Data on Airbnb Locations in trentino obtained from [insideairbnb.com](https://insideairbnb.com/get-the-data/). The data were gathered by the platform through a web scraping of [airbnb.com](https://www.airbnb.com/); in total `{r} nrow(trentinoairbnb)` listings were scraped on `{r} trentinoairbnb$last_scraped |> unique() |> length()` unique dates. @tbl-last-scrape the dates on which the scraping occurred and the numbers of listing scraped on each date.
 
-The data is sourced **by code** from an open-data portal of your choice. Because
-the download lives inside the document, it is recorded in the analysis itself;
-anyone who re-renders this document gets the same data and the same results.
-Record the dataset's **publisher and URL** in the text so the provenance is
-explicit.
+```{r}
+#| tbl-cap: "Dates of scraping and number of scraped listings."
+#| label: tbl-last-scrape
 
-The only portal-specific part is the *fetch*. This template shows two ways;
-use the one that fits your portal:
+#Understanding when each listing was scraped
+num_scraped <- trentinoairbnb |> 
+  group_by(last_scraped) |> 
+  summarise(n = n()) |> 
+  ungroup()
+
+num_scraped |> gt() |> cols_label(last_scraped ~ "Scrape Date", n ~ "Scraped Listings") |> opt_stylize(style = 5, color = "red")
+```
 
 - **`{rdatagouv}`** (data.gouv.fr only, optional): search/download from R.
 - **Any portal by URL**: `download.file()` works with any portal's direct
@@ -110,15 +96,15 @@ use the one that fits your portal:
 ## A first look
 
 ```{r}
-#| label: skim
+#| label: fig-skim
 #| fig-cap: "A one-line summary of the dataset."
-skim(star)
+skim(trentinoairbnb)
 ```
 
 ```{r}
 #| label: missingness
 #| fig-cap: "Missing values across variables."
-# vis_miss(dat) — where is data missing, and why might that be?
+vis_miss(slice_sample(trentinoairbnb,n =2000))
 ```
 
 ## Cleaning decisions {#sec-cleaning}
@@ -126,6 +112,10 @@ skim(star)
 <!-- TODO: document the decisions you made while cleaning the data. What did you
 rename, recode, or drop, and why? A defensible cleaning decision is a feature
 of a good analysis, not an afterthought. -->
+
+```{r}
+
+```
 
 ## Plotting the story
 
