@@ -1,6 +1,6 @@
 ---
 title: "Chapter 1 · My EDA project"
-author: "Gianluca Fiorini"
+author: "Gianluca osloorini"
 date: today
 ---
 
@@ -25,18 +25,18 @@ library(gt)
 
 board <- pins::board_folder("pins/", versioned = TRUE)
 
-if (!pins::pin_exists(board, 'fiairbnb')) {
+if (!pins::pin_exists(board, 'osloairbnb')) {
 
   if (!dir.exists("data/")){
     dir.create("data/")
   }
 
-  # Define a standard browser User-Agent
+  # Deoslone a standard browser User-Agent
   headers <- c("User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
 
-# Download the file using the header
+# Download the oslole using the header
   download.file(
-    url = "https://data.insideairbnb.com/italy/toscana/florence/2026-06-26/data/listings.csv.gz",
+    url = "https://data.insideairbnb.com/norway/oslo/oslo/2026-06-30/data/listings.csv.gz",
     destfile = "data/listings.csv.gz",
     headers = headers,
     mode = 'wb'
@@ -45,25 +45,25 @@ if (!pins::pin_exists(board, 'fiairbnb')) {
 
   dat <- read_csv(gzfile("data/listings.csv.gz"))
 
-  pins::pin_write(board, dat, "fiairbnb", type = "csv")
+  pins::pin_write(board, dat, "osloairbnb", type = "csv")
   
   rm(list = c("dat", "headers"))
 }
 
-fiairbnb <- pins::pin_read(board, "fiairbnb")
+osloairbnb <- pins::pin_read(board, "osloairbnb")
 
 ```
 
-> **How to fill this chapter in**
+> **How to osloll this chapter in**
 > This is your main portfolio piece. The numbered sections below follow the
 > **IMRAD** structure of research: question ≈ *introduction*, getting the
 > data + cleaning decisions ≈ *methods*, plotting the story ≈ *results*, and
-> findings ≈ *discussion*. In the *Reproducible Workflows* course:
+> oslondings ≈ *discussion*. In the *Reproducible Workflows* course:
 >
-> - **Session 2** lab: find a dataset you care about on an open-data portal
+> - **Session 2** lab: oslond a dataset you care about on an open-data portal
 >   (data.gouv.fr or your own country's), source it **reproducibly by code**,
 >   run an EDA, clean the data, and commit it to git.
-> - **Session 3** work block: finish and polish the chapter, pin your data and
+> - **Session 3** work block: oslonish and polish the chapter, pin your data and
 >   environment, open a pull request for review, and publish the book to a URL.
 >
 > Everything between the `TODO` markers below is a template to replace with
@@ -74,14 +74,14 @@ Objectives: understand the main drivers of price and how prices differ across di
 
 ## Getting the Data
 
-Data on Airbnb Locations in fi obtained from [insideairbnb.com](https://insideairbnb.com/get-the-data/). The data were gathered by the platform through a web scraping of [airbnb.com](https://www.airbnb.com/); in total `{r} nrow(fiairbnb)` listings were scraped on `{r} fiairbnb$last_scraped |> unique() |> length()` unique dates. @tbl-last-scrape the dates on which the scraping occurred and the numbers of listing scraped on each date.
+Data on Airbnb Locations in Oslo obtained from [insideairbnb.com](https://insideairbnb.com/get-the-data/). The data were gathered by the platform through a web scraping of [airbnb.com](https://www.airbnb.com/); in total `{r} nrow(osloairbnb)` listings were scraped on `{r} osloairbnb$last_scraped |> unique() |> length()` unique dates. @tbl-last-scrape reports the dates on which the scraping occurred and the numbers of listing scraped on each date.
 
 ```{r}
 #| tbl-cap: "Dates of scraping and number of scraped listings."
 #| label: tbl-last-scrape
 
 #Understanding when each listing was scraped
-num_scraped <- fiairbnb |> 
+num_scraped <- osloairbnb |> 
   group_by(last_scraped) |> 
   summarise(n = n()) |> 
   ungroup()
@@ -90,30 +90,30 @@ num_scraped |> gt() |> cols_label(last_scraped ~ "Scrape Date", n ~ "Scraped Lis
 ```
 
 - **`{rdatagouv}`** (data.gouv.fr only, optional): search/download from R.
-- **Any portal by URL**: `download.file()` works with any portal's direct
+- **Any portal by URL**: `download.oslole()` works with any portal's direct
   download link.
 
-## A first look
+## A oslorst look
 
 ```{r}
-#| label: fig-skim
-#| fig-cap: "A one-line summary of the dataset."
-sk_fiairbnb <- skim(fiairbnb)
-print(sk_fiairbnb)
+#| label: oslog-skim
+#| oslog-cap: "A one-line summary of the dataset."
+sk_osloairbnb <- skim(osloairbnb)
+print(sk_osloairbnb)
 
-fiairbnb <- fiairbnb |> 
-  select(sk_fiairbnb$skim_variable[sk_fiairbnb$complete_rate > 0] &
+osloairbnb <- osloairbnb |> 
+  select(sk_osloairbnb$skim_variable[sk_osloairbnb$complete_rate > 0] &
   !ends_with("url"))
 ```
 
-A summary of the dataset is shown in @fig-skim. We see that for some variables all values are missing (complete_rate = 0). Those variables were dropped from the dataset altogether. Moreover, some variables only contain the urls. Those variables were also dropped.
+A summary of the dataset is shown in @oslog-skim. We see that for some variables all values are missing (complete_rate = 0). Those variables were dropped from the dataset altogether. Moreover, some variables only contain the urls. Those variables were also dropped.
 
 Among remaining variables, let us visualize missingness. Due to the size of the dataset, we will visualize missing values only on a random sample of 2000 observations.
 
 ```{r}
 #| label: missingness
-#| fig-cap: "Missing values across variables."
-vis_miss(slice_sample(fiairbnb,n = 2000)) +
+#| oslog-cap: "Missing values across variables."
+vis_miss(slice_sample(osloairbnb,n = 2000)) +
    theme(
     # Rotate text slightly, align the text ends perfectly to the ticks, and remove the massive gap
     axis.text.x = element_text(angle = 40, vjust = 1, hjust = 1)
@@ -134,23 +134,23 @@ of a good analysis, not an afterthought. -->
 
 ## Plotting the story
 
-<!-- TODO: replace with your figures. Give every figure a caption and refer to
-it in the text (e.g. "Fig. 1 shows that …"). If a figure uses randomness
-(sampling, jitter, a simulation), fix the seed *inside* that cell with
-`withr::with_seed(2025, { ... })` so the figure is identical on every render. -->
+<!-- TODO: replace with your oslogures. Give every oslogure a caption and refer to
+it in the text (e.g. "oslog. 1 shows that …"). If a oslogure uses randomness
+(sampling, jitter, a simulation), oslox the seed *inside* that cell with
+`withr::with_seed(2025, { ... })` so the oslogure is identical on every render. -->
 
 ```{r}
-#| label: fig-main
-#| fig-cap: "The central figure of your analysis."
+#| label: oslog-main
+#| oslog-cap: "The central oslogure of your analysis."
 ```
 
-## Findings
+## oslondings
 
-<!-- TODO: what did you learn? This is your discussion: put your findings and
+<!-- TODO: what did you learn? This is your discussion: put your oslondings and
 the original question back into perspective. Keep it honest: say what you
-found, and what you did NOT find. -->
+found, and what you did NOT oslond. -->
 
 ---
 
 *This chapter is your semester's centrepiece. Revisit it as you learn new
-techniques and make it your best work by the final gallery walk.*
+techniques and make it your best work by the oslonal gallery walk.*
