@@ -25,7 +25,7 @@ library(gt)
 
 board <- pins::board_folder("pins/", versioned = TRUE)
 
-if (!pins::pin_exists(board, 'trentinoairbnb')) {
+if (!pins::pin_exists(board, 'fiairbnb')) {
 
   if (!dir.exists("data/")){
     dir.create("data/")
@@ -36,7 +36,7 @@ if (!pins::pin_exists(board, 'trentinoairbnb')) {
 
 # Download the file using the header
   download.file(
-    url = "https://data.insideairbnb.com/italy/trentino-alto-adige-s%C3%BCdtirol/trentino/2026-06-30/data/listings.csv.gz",
+    url = "https://data.insideairbnb.com/italy/toscana/florence/2026-06-26/data/listings.csv.gz",
     destfile = "data/listings.csv.gz",
     headers = headers,
     mode = 'wb'
@@ -45,12 +45,12 @@ if (!pins::pin_exists(board, 'trentinoairbnb')) {
 
   dat <- read_csv(gzfile("data/listings.csv.gz"))
 
-  pins::pin_write(board, dat, "trentinoairbnb", type = "csv")
+  pins::pin_write(board, dat, "fiairbnb", type = "csv")
   
   rm(list = c("dat", "headers"))
 }
 
-trentinoairbnb <- pins::pin_read(board, "trentinoairbnb")
+fiairbnb <- pins::pin_read(board, "fiairbnb")
 
 ```
 
@@ -74,14 +74,14 @@ Objectives: understand the main drivers of price and how prices differ across di
 
 ## Getting the Data
 
-Data on Airbnb Locations in trentino obtained from [insideairbnb.com](https://insideairbnb.com/get-the-data/). The data were gathered by the platform through a web scraping of [airbnb.com](https://www.airbnb.com/); in total `{r} nrow(trentinoairbnb)` listings were scraped on `{r} trentinoairbnb$last_scraped |> unique() |> length()` unique dates. @tbl-last-scrape the dates on which the scraping occurred and the numbers of listing scraped on each date.
+Data on Airbnb Locations in fi obtained from [insideairbnb.com](https://insideairbnb.com/get-the-data/). The data were gathered by the platform through a web scraping of [airbnb.com](https://www.airbnb.com/); in total `{r} nrow(fiairbnb)` listings were scraped on `{r} fiairbnb$last_scraped |> unique() |> length()` unique dates. @tbl-last-scrape the dates on which the scraping occurred and the numbers of listing scraped on each date.
 
 ```{r}
 #| tbl-cap: "Dates of scraping and number of scraped listings."
 #| label: tbl-last-scrape
 
 #Understanding when each listing was scraped
-num_scraped <- trentinoairbnb |> 
+num_scraped <- fiairbnb |> 
   group_by(last_scraped) |> 
   summarise(n = n()) |> 
   ungroup()
@@ -98,14 +98,29 @@ num_scraped |> gt() |> cols_label(last_scraped ~ "Scrape Date", n ~ "Scraped Lis
 ```{r}
 #| label: fig-skim
 #| fig-cap: "A one-line summary of the dataset."
-skim(trentinoairbnb)
+sk_fiairbnb <- skim(fiairbnb)
+print(sk_fiairbnb)
+
+fiairbnb <- fiairbnb |> 
+  select(sk_fiairbnb$skim_variable[sk_fiairbnb$complete_rate > 0] &
+  !ends_with("url"))
 ```
+
+A summary of the dataset is shown in @fig-skim. We see that for some variables all values are missing (complete_rate = 0). Those variables were dropped from the dataset altogether. Moreover, some variables only contain the urls. Those variables were also dropped.
+
+Among remaining variables, let us visualize missingness. Due to the size of the dataset, we will visualize missing values only on a random sample of 2000 observations.
 
 ```{r}
 #| label: missingness
 #| fig-cap: "Missing values across variables."
-vis_miss(slice_sample(trentinoairbnb,n =2000))
+vis_miss(slice_sample(fiairbnb,n = 2000)) +
+   theme(
+    # Rotate text slightly, align the text ends perfectly to the ticks, and remove the massive gap
+    axis.text.x = element_text(angle = 40, vjust = 1, hjust = 1)
+   )
 ```
+
+Clearly there are some notable patterns in the missingness. We see that around 20% of observations are lacking data on reviews, 20% are lacking data on price, 35% are lacking information on the host's location and 60% are lacking a host description.
 
 ## Cleaning decisions {#sec-cleaning}
 
