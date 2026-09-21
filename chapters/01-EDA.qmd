@@ -8,7 +8,6 @@ date: today
 #| echo: false
 #| message: false
 #| include: false
-
 library(janitor)
 library(skimr)
 library(naniar)
@@ -24,32 +23,6 @@ library(gt)
 #Creating directory to host the data, if it does not already exist
 
 board <- pins::board_folder("pins/", versioned = TRUE)
-
-if (!pins::pin_exists(board, 'osloairbnb')) {
-
-  if (!dir.exists("data/")){
-    dir.create("data/")
-  }
-
-  # Deoslone a standard browser User-Agent
-  headers <- c("User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
-
-# Download the oslole using the header
-  download.file(
-    url = "https://data.insideairbnb.com/norway/oslo/oslo/2026-06-30/data/listings.csv.gz",
-    destfile = "data/listings.csv.gz",
-    headers = headers,
-    mode = 'wb'
-  )
-
-
-  dat <- read_csv(gzfile("data/listings.csv.gz"))
-
-  pins::pin_write(board, dat, "osloairbnb", type = "csv")
-  
-  rm(list = c("dat", "headers"))
-}
-
 osloairbnb <- pins::pin_read(board, "osloairbnb") |> as_tibble()
 
 ```

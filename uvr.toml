@@ -1,0 +1,9 @@
+[project]
+name = "portfolio-book"
+
+[dependencies]
+gt = "*"
+janitor = "*"
+naniar = "*"
+skimr = "*"
+tidyverse = "*"
