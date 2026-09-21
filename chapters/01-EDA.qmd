@@ -72,7 +72,7 @@ osloairbnb <- pins::pin_read(board, "osloairbnb")
 ## The Question
 Airbnb is a platform that connects travelers looking for short-term accomodations with property owners interested in renting out their property; Airbnb listings can be found on [aribnb.com](airbnb.com). [insideairbnb.com](https://insideairbnb.com) is a website which gathers data on airbnb listings in selected locations by periodically scraping airbnb.com search results for those areas. Scraped information for each listing contains data on the the host (i.e. the property owner), the accomodation, and user reviews; data from the scrapings is made available in the form of datasets collecting both raw variables, and calculated fields at [insideaibnb.com](https://insideairbnb.com).
 
-In this analysis I will work with data for Airbnb listings in Oslo. The main focus will be the price per night and the features of the airbnb listings. In particular, the analysis aims to answer 3 main questions:
+In this analysis I will work with data for Airbnb listings in Oslo. The main focus will be the price per night, and the features of the airbnb listings. In particular, the analysis aims to answer 3 main questions:
 
 -  What are the main drivers of the price per night?
 -  How much does the location of the accomodation impact the price per night, and how much do accomodations in different locations differ from one another?
