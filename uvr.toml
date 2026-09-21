@@ -2,8 +2,15 @@
 name = "portfolio-book"
 
 [dependencies]
+ggmice = "*"
 gt = "*"
 janitor = "*"
+mice = "*"
 naniar = "*"
+pins = "*"
 skimr = "*"
 tidyverse = "*"
+withr = "*"
+
+[dependencies.uvr]
+git = "nbafrank/uvr-r"
