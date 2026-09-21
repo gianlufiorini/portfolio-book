@@ -70,7 +70,13 @@ osloairbnb <- pins::pin_read(board, "osloairbnb")
 > your own content.
 
 ## The Question
-Objectives: understand the main drivers of price and how prices differ across different areas.
+Airbnb is a platform that connects travelers looking for short-term accomodations with property owners interested in renting out their property; Airbnb listings can be found on [aribnb.com](airbnb.com). [insideairbnb.com](https://insideairbnb.com) is a website which gathers data on airbnb listings in selected locations by periodically scraping airbnb.com search results for those areas. Scraped information for each listing contains data on the the host (i.e. the property owner), the accomodation, and user reviews; data from the scrapings is made available in the form of datasets collecting both raw variables, and calculated fields at [insideaibnb.com](https://insideairbnb.com).
+
+In this analysis I will work with data for Airbnb listings in Oslo. The main focus will be the price per night and the features of the airbnb listings. In particular, the analysis aims to answer 3 main questions:
+
+-  What are the main drivers of the price per night?
+-  How much does the location of the accomodation impact the price per night, and how much do accomodations in different locations differ from one another?
+-  Does the host's number of listings have any relation to the price per night or to the features of the accomodation? 
 
 ## Getting the Data
 
@@ -93,12 +99,12 @@ num_scraped |> gt() |> cols_label(last_scraped ~ "Scrape Date", n ~ "Scraped Lis
 - **Any portal by URL**: `download.oslole()` works with any portal's direct
   download link.
 
-## A oslorst look
+## A first look
 
 ```{r}
-#| label: oslog-skim
-#| oslog-cap: "A one-line summary of the dataset."
-sk_osloairbnb <- skim(osloairbnb)
+#| label: tbl-skim
+#| tbl-cap: "A one-line summary of the dataset."
+sk_osloairbnb <- skim_without_charts(osloairbnb)
 print(sk_osloairbnb)
 
 osloairbnb <- osloairbnb |> 
@@ -106,21 +112,52 @@ osloairbnb <- osloairbnb |>
   !ends_with("url"))
 ```
 
-A summary of the dataset is shown in @oslog-skim. We see that for some variables all values are missing (complete_rate = 0). Those variables were dropped from the dataset altogether. Moreover, some variables only contain the urls. Those variables were also dropped.
+A summary of the dataset is shown in @tbl-skim. We see that for some variables all values are missing (complete_rate = 0). Those variables were dropped from the dataset altogether. Moreover, some variables only contained urls. Those variables were also dropped.
 
-Among remaining variables, let us visualize missingness. Due to the size of the dataset, we will visualize missing values only on a random sample of 2000 observations.
-
+@fig-missing shows missing values among variables having at least one missing values.
 ```{r}
-#| label: missingness
-#| oslog-cap: "Missing values across variables."
-vis_miss(slice_sample(osloairbnb,n = 2000)) +
-   theme(
-    # Rotate text slightly, align the text ends perfectly to the ticks, and remove the massive gap
-    axis.text.x = element_text(angle = 40, vjust = 1, hjust = 1)
-   )
+#| label: fig-missing
+#| fig-align: center
+#| fig-width: 10
+#| fig-height: 8
+#| fig-cap: "Missing values across variables."
+osloairbnb |> 
+  select(where(\(x) anyNA(x))) |> 
+  vis_miss() +
+     theme(
+      # Rotate text slightly, align the text ends perfectly to the ticks, and remove the massive gap
+      axis.text.x = element_text(angle = 40, vjust = 1, hjust = 1)
+     )
 ```
 
-Clearly there are some notable patterns in the missingness. We see that around 20% of observations are lacking data on reviews, 20% are lacking data on price, 35% are lacking information on the host's location and 60% are lacking a host description.
+A considerable number of missing values can be seen for the following variables:
+host_location, hos_about, bedrooms, beds, bathrooms, variables relating to price, and variables relating to revies. Interestingly, the variable bathrooms_text has almost no missing values, meaning that most missing values in bathrooms are just a byproduct of the scraping, and can be filled in easily. Moreover, is seems that missingness in variables relating to price, and in variables relating to reviews tends to occur simultaneously; @fig-missing-2 provides a visualization of missingness patterns in these variables. It seems that when there are missing values, in general, either all price variables are missing or all review variables are missing, but only relatively rarely both are missing together.
+
+```{r}
+#| label: fig-missing-2
+#| fig-align: center
+#| fig-width: 10
+#| fig-height: 8
+#| fig-cap: "Patterns in missingness across price, review, and host infotmation variables"
+
+pat_matrix <- osloairbnb |> 
+  select(where(\(x) anyNA(x)) & (starts_with("price") | contains("review"))) |> 
+  mice::md.pattern(plot = FALSE)
+raw_counts <- as.numeric(rownames(pat_matrix)[-nrow(pat_matrix)])
+
+# 3. Convert raw counts to rounded percentage strings
+pct_labels <- paste0(round((raw_counts / nrow(osloairbnb)) * 100, 1), "%")
+
+osloairbnb |> 
+  select(where(\(x) anyNA(x)) & (starts_with("price") | contains("review"))) |> 
+  ggmice::plot_pattern(square = FALSE, rotate = TRUE) +  scale_y_reverse(
+    breaks = seq_along(raw_counts),
+    labels = pct_labels,
+    sec.axis = dup_axis(name = "Number of missing entries\nper pattern")
+  ) +
+  labs(y = "Pattern frequency (%)")
+
+```
 
 ## Cleaning decisions {#sec-cleaning}
 
@@ -144,7 +181,7 @@ it in the text (e.g. "oslog. 1 shows that …"). If a oslogure uses randomness
 #| oslog-cap: "The central oslogure of your analysis."
 ```
 
-## oslondings
+## Findings
 
 <!-- TODO: what did you learn? This is your discussion: put your oslondings and
 the original question back into perspective. Keep it honest: say what you

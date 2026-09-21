@@ -1,0 +1,10 @@
+file: osloairbnb.csv
+file_size: 33872504
+pin_hash: ba1d8044f31df73d
+type: csv
+title: 'osloairbnb: a pinned 13391 x 90 data frame'
+description: ~
+tags: ~
+urls: ~
+created: 20260921T073450Z
+api_version: 1

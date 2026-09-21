@@ -50,6 +50,27 @@ blockquote {
 .accent-gold {
   color: $darkgold !important;
 }
+/* 1. Target the raw code container inside the output cell */
+.cell-output pre,
+.cell-output code,
+.cell-output-stdout pre,
+.cell-output-stdout code {
+    color: #ffffff !important;
+}
+
+/* 2. Target Pandoc's specific code/source output class selectors */
+pre.code-output, 
+pre.code-output code,
+.sourceCode pre {
+    color: #ffffff !important;
+}
+
+/* 3. If you are printing tables (like knitr or pandas tables) */
+.cell-output table, 
+.cell-output td, 
+.cell-output th {
+    color: #ffffff !important;
+}
 
 
 
