@@ -50,7 +50,7 @@ if (!pins::pin_exists(board, 'osloairbnb')) {
   rm(list = c("dat", "headers"))
 }
 
-osloairbnb <- pins::pin_read(board, "osloairbnb")
+osloairbnb <- pins::pin_read(board, "osloairbnb") |> as_tibble()
 
 ```
 
@@ -76,11 +76,11 @@ In this analysis I will work with data for Airbnb listings in Oslo. The main foc
 
 -  What are the main drivers of the price per night?
 -  How much does the location of the accomodation impact the price per night, and how much do accomodations in different locations differ from one another?
--  Does the host's number of listings have any relation to the price per night or to the features of the accomodation? 
+-  Do the (recorded) host's features have any relation to the price per night or to the features of the accomodation? 
 
 ## Getting the Data
 
-Data on Airbnb Locations in Oslo obtained from [insideairbnb.com](https://insideairbnb.com/get-the-data/). The data were gathered by the platform through a web scraping of [airbnb.com](https://www.airbnb.com/); in total `{r} nrow(osloairbnb)` listings were scraped on `{r} osloairbnb$last_scraped |> unique() |> length()` unique dates. @tbl-last-scrape reports the dates on which the scraping occurred and the numbers of listing scraped on each date.
+Data on Airbnb Locations in Oslo obtained from [insideairbnb.com](https://insideairbnb.com/get-the-data/). The data were gathered by the platform through a web scraping of [airbnb.com](https://www.airbnb.com/); in total `{r} nrow(osloairbnb)` listings were scraped on `{r} osloairbnb$last_scraped |> unique() |> length()` unique dates. @tbl-last-scrape reports the dates on which the scraping occurred and the numbers of listing scraped on each date. To allow for reproducibility, the dataset was sourced directly from the web and its version was pinned.
 
 ```{r}
 #| tbl-cap: "Dates of scraping and number of scraped listings."
@@ -91,9 +91,32 @@ num_scraped <- osloairbnb |>
   group_by(last_scraped) |> 
   summarise(n = n()) |> 
   ungroup()
-
-num_scraped |> gt() |> cols_label(last_scraped ~ "Scrape Date", n ~ "Scraped Listings") |> opt_stylize(style = 5, color = "red")
 ```
+
+:::{.light-content}
+```{r}
+#| echo: false
+
+num_scraped |> gt() |> cols_label(last_scraped ~ "Scrape Date", n ~ "Scraped Listings")|>
+  tab_options(
+  table.font.names = "Helvetica",
+  column_labels.font.weight = "bold"
+  )
+```
+:::
+
+:::{.dark-content}
+```{r}
+#| echo: false
+
+num_scraped |> gt() |> cols_label(last_scraped ~ "Scrape Date", n ~ "Scraped Listings")|>
+  tab_options(table.background.color = "#42494c",
+  table.font.color = "#F5F6F1",
+  table.font.names = "Helvetica",
+  column_labels.font.weight = "bold"
+  )
+```
+:::
 
 - **`{rdatagouv}`** (data.gouv.fr only, optional): search/download from R.
 - **Any portal by URL**: `download.oslole()` works with any portal's direct
@@ -107,9 +130,7 @@ num_scraped |> gt() |> cols_label(last_scraped ~ "Scrape Date", n ~ "Scraped Lis
 sk_osloairbnb <- skim_without_charts(osloairbnb)
 print(sk_osloairbnb)
 
-osloairbnb <- osloairbnb |> 
-  select(sk_osloairbnb$skim_variable[sk_osloairbnb$complete_rate > 0] &
-  !ends_with("url"))
+osloairbnb <- osloairbnb |> select(!ends_with("url") & !where(\(x) all(is.na(x))))
 ```
 
 A summary of the dataset is shown in @tbl-skim. We see that for some variables all values are missing (complete_rate = 0). Those variables were dropped from the dataset altogether. Moreover, some variables only contained urls. Those variables were also dropped.
@@ -160,14 +181,21 @@ osloairbnb |>
 ```
 
 ## Cleaning decisions {#sec-cleaning}
-
-<!-- TODO: document the decisions you made while cleaning the data. What did you
-rename, recode, or drop, and why? A defensible cleaning decision is a feature
-of a good analysis, not an afterthought. -->
+From @tbl-skim, we see a lot of variables are coded in an unsuitable way. For instance, many ids are coded as numeric, dates are coded as character, and binary variables are coded as logical. I will now clean the data to fix the issues.
 
 ```{r}
+osloairbnb <- osloairbnb |> 
+  mutate(
+    across(ends_with("id"), as_factor),
+    across(ends_with("type"), as_factor),
+    across(where(\(x) is.logical(x)), \(y) factor(y, levels = c(FALSE, TRUE), labels = c("Yes", "No"))),
+    across(contains(c("last", "first", "date")), as_date),
+    source = as_factor(source)
+  )
 
 ```
+
+All id variables were recoded as factors; property type and room type were also recoded as factors; all logical variables were recoded as factors; the variable source, indicating the scrape that provided the data, was also recoded as a factor; finally, variables indicating dates, e.g. last_scraped, last_review, and price_quote_checkin_date, were recoded as the appropriate data type.
 
 ## Plotting the story
 
@@ -177,7 +205,7 @@ it in the text (e.g. "oslog. 1 shows that …"). If a oslogure uses randomness
 `withr::with_seed(2025, { ... })` so the oslogure is identical on every render. -->
 
 ```{r}
-#| label: oslog-main
+#| label: fig-main
 #| oslog-cap: "The central oslogure of your analysis."
 ```
 
