@@ -11,6 +11,7 @@ pins = "*"
 skimr = "*"
 tidyverse = "*"
 withr = "*"
+wordcloud2 = "*"
 
 [dependencies.uvr]
 git = "nbafrank/uvr-r"

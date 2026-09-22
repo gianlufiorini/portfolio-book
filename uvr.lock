@@ -1914,6 +1914,18 @@ url = "https://cran.r-project.org/src/contrib/withr_3.0.3.tar.gz"
 checksum = "md5:121bf3699aadb9d1b47d648964b934f8"
 
 [[package]]
+name = "wordcloud2"
+version = "0.2.1"
+source = "cran"
+raw_version = "0.2.1"
+url = "https://cran.r-project.org/src/contrib/wordcloud2_0.2.1.tar.gz"
+checksum = "md5:299071535412b7053ad6b9e221e47f9b"
+requires = [
+    "htmlwidgets",
+    "base64enc",
+]
+
+[[package]]
 name = "xfun"
 version = "0.61.0"
 source = "cran"

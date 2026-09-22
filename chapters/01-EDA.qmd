@@ -170,6 +170,30 @@ osloairbnb <- osloairbnb |>
 
 All id variables were recoded as factors; property type and room type were also recoded as factors; all logical variables were recoded as factors; the variable source, indicating the scrape that provided the data, was also recoded as a factor; finally, variables indicating dates, e.g. last_scraped, last_review, and price_quote_checkin_date, were recoded as the appropriate data type.
 
+Apart from that, some variables can be created starting from the existing ones. Namely, the bathrooms_text variable can be used to fill in the missing values for the bathrooms variable, and the amenities variable can be used to create multiple dummy variables indicating whether an accomodation offers a certain amenity or not, so as to provide a better gauge of the features of the accomodations.
+
+```{r}
+osloairbnb$bathrooms_new <- osloairbnb$bathrooms_text |> #Creating new factor variable for the number of bathrooms
+  strsplit(" ") |> #splitting bathrooms_text values
+  vapply(\(x) x[1], character(1)) #Extracting 1st element of each of the split values
+```
+
+In creating the new bathrooms variable (bathrooms_new) starting from bathrooms_text, `{r} sum(grepl("0", osloairbnb$bathrooms_new, ignore.case = T))` were recorded as having 0 bathrooms. Thes values will be recoded as NAs.
+The column will then be recoded as numeric
+
+```{r}
+osloairbnb <- osloairbnb|> 
+  mutate(bathrooms_new = if_else(bathrooms_new == "0", NA, bathrooms_new)) |> #Replacing 0 values with NAs
+  mutate(bathrooms_new = if_else(grepl("Half|Shared|Private", bathrooms_new, ignore.case = TRUE), "0.5", bathrooms_new)) |> #Catching half bathrooms and replacing with 0.5
+  mutate(bathrooms_new = as.numeric(bathrooms_new))
+```
+
+Now, before creating dummy variables for the amenities, let us consider which amenities are most common. In particular, it would be sensible to only keep track of amenities that are not too rare but, at the same time, not so common that (almost) every accomodation has them: such features would not provide much information.
+
+To visualize the frequency of amenities across all accomodations, we will start with a word cloud.
+
+```{r}
+```
 ## Plotting the story
 
 <!-- TODO: replace with your oslogures. Give every oslogure a caption and refer to

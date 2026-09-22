@@ -6,7 +6,9 @@ uvr::r_pin("4.6.1")
 
 #Pinning R packages
 uvr::scan()
-uvr::add(c("tidyverse", "gt", "skimr", "janitor", "naniar", "mice", "ggmice", "pins", "uvr", "withr", "nbafrank/uvr-r"))
+uvr::add(c("tidyverse", "gt", "skimr", "janitor", "naniar", "mice", 
+  "ggmice", "pins", "uvr", "withr", "nbafrank/uvr-r",
+  "wordcloud2"))
 
 #To align with the R and package versions used for the analyses one should use the function
 
