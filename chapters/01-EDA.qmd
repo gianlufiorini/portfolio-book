@@ -27,7 +27,7 @@ osloairbnb <- pins::pin_read(board, "osloairbnb") |> as_tibble()
 
 ```
 
-> **How to osloll this chapter in**
+> **How to fill this chapter in**
 > This is your main portfolio piece. The numbered sections below follow the
 > **IMRAD** structure of research: question ≈ *introduction*, getting the
 > data + cleaning decisions ≈ *methods*, plotting the story ≈ *results*, and
@@ -188,12 +188,38 @@ osloairbnb <- osloairbnb|>
   mutate(bathrooms_new = as.numeric(bathrooms_new))
 ```
 
-Now, before creating dummy variables for the amenities, let us consider which amenities are most common. In particular, it would be sensible to only keep track of amenities that are not too rare but, at the same time, not so common that (almost) every accomodation has them: such features would not provide much information.
+Now, before creating dummy variables for the amenities, let us consider which amenities are most common. It would be sensible to only keep track of amenities that are not too rare but, at the same time, not so common that (almost) every accomodation has them: such features would not provide much information.
 
-To visualize the frequency of amenities across all accomodations, we will start with a word cloud.
+To visualize the frequency of amenities across all accomodations, we will start with a word cloud, which is shown in @fig-wordcloud. From the wordcloud we can see some of the most common amenities. Considering them all would be very cumbersome and naive. For this analysis, we will focus on a selection of them which could reasonably be related to the price of an accomodation and/or may be influenced by the location of the airbnb.
 
 ```{r}
+#| label: fig-wordcloud
+#| fig-align: center
+#| fig-width: 8
+#| fig-height: 12
+#| fig-cap: "Wordcloud of amenities. The size of the words is proportional to the percentage of homes having that amenity. Amenities present in over 90% of homes or in less than 10% of homes were excluded"
+
+amenities_vec <- osloairbnb$amenities |> 
+  str_to_lower() |> 
+  str_split(",", simplify = TRUE) |> 
+  str_replace_all("[:punct:]+", " ") |> 
+  str_replace_all("u([0-9a-fA-F]{4})", "") |>  #removing scraping artefacts
+  str_trim()
+amenities_vec <- amenities_vec
+
+amenities_vec <- amenities_vec[amenities_vec != ""]
+
+amenities_freqs <- (table(amenities_vec)/nrow(osloairbnb)) |> as_tibble() #For a better visualization we will use percentage frequencies.
+
+#We remove amenities present in over 90% of apartments and in at least 5%
+amenities_freqs <- amenities_freqs[amenities_freqs$n <= .90 & amenities_freqs$n >= .1,]
+
+withr::with_seed(1234,
+  wordcloud2::wordcloud2(amenities_freqs, size = 0.5, rotateRatio = .5, minRotation = -pi/2, maxRotation = -pi/2)
+)
 ```
+
+
 ## Plotting the story
 
 <!-- TODO: replace with your oslogures. Give every oslogure a caption and refer to

@@ -95,11 +95,11 @@ requires = [
 
 [[package]]
 name = "V8"
-version = "8.2.0"
+version = "8.2.1"
 source = "cran"
-raw_version = "8.2.0"
-url = "https://cran.r-project.org/src/contrib/V8_8.2.0.tar.gz"
-checksum = "md5:c8d926eb2f59ebe63debc864fa6a5096"
+raw_version = "8.2.1"
+url = "https://cran.r-project.org/src/contrib/V8_8.2.1.tar.gz"
+checksum = "md5:6cae314842087ce6253117501f73a1ee"
 requires = [
     "Rcpp",
     "jsonlite",
@@ -327,11 +327,11 @@ checksum = "md5:bb290c70d23b2200006187ac7839116f"
 
 [[package]]
 name = "curl"
-version = "8.0.0"
+version = "8.1.0"
 source = "cran"
-raw_version = "8.0.0"
-url = "https://cran.r-project.org/src/contrib/curl_8.0.0.tar.gz"
-checksum = "md5:11e42cdbfa575a081e5bf9a710ee76bd"
+raw_version = "8.1.0"
+url = "https://cran.r-project.org/src/contrib/curl_8.1.0.tar.gz"
+checksum = "md5:196b1c5e8adafec4b5bb9123864b52b4"
 
 [[package]]
 name = "data.table"
@@ -557,11 +557,11 @@ requires = [
 
 [[package]]
 name = "glmnet"
-version = "5.0.0"
+version = "5.1.0"
 source = "cran"
-raw_version = "5.0"
-url = "https://cran.r-project.org/src/contrib/glmnet_5.0.tar.gz"
-checksum = "md5:094cffb05ba0a8685aae3e1bb8cf2c9d"
+raw_version = "5.1"
+url = "https://cran.r-project.org/src/contrib/glmnet_5.1.tar.gz"
+checksum = "md5:9ff5a9e4f2a2ceded081005bea78cbd3"
 requires = [
     "Matrix",
     "foreach",
@@ -641,11 +641,11 @@ requires = ["gtable"]
 
 [[package]]
 name = "gt"
-version = "1.3.0"
+version = "1.4.0"
 source = "cran"
-raw_version = "1.3.0"
-url = "https://cran.r-project.org/src/contrib/gt_1.3.0.tar.gz"
-checksum = "md5:81c2eb281461bb8423faaca8dbd1b640"
+raw_version = "1.4.0"
+url = "https://cran.r-project.org/src/contrib/gt_1.4.0.tar.gz"
+checksum = "md5:2d4dcb3e8fed11257adeb7b0514dd030"
 requires = [
     "base64enc",
     "bigD",
@@ -923,11 +923,11 @@ requires = [
 
 [[package]]
 name = "lme4"
-version = "2.0.6"
+version = "2.1.0"
 source = "cran"
-raw_version = "2.0-6"
-url = "https://cran.r-project.org/src/contrib/lme4_2.0-6.tar.gz"
-checksum = "md5:cf60da58c196ac7f2ac8094b6a13b6ce"
+raw_version = "2.1-0"
+url = "https://cran.r-project.org/src/contrib/lme4_2.1-0.tar.gz"
+checksum = "md5:673b4943af202f4ea2fec10aa92732eb"
 requires = [
     "Matrix",
     "MASS",
@@ -1364,13 +1364,15 @@ requires = [
 
 [[package]]
 name = "readxl"
-version = "1.5.0-4.1"
+version = "1.6.0"
 source = "cran"
-raw_version = "1.5.0.1"
-url = "https://cran.r-project.org/src/contrib/readxl_1.5.0.1.tar.gz"
-checksum = "md5:c29e07dbcae56f627b3db7ce48a5577b"
+raw_version = "1.6.0"
+url = "https://cran.r-project.org/src/contrib/readxl_1.6.0.tar.gz"
+checksum = "md5:1d3f34e0d3f5f639aaf4286dfc631024"
 requires = [
     "cellranger",
+    "cli",
+    "rlang",
     "tibble",
     "cpp11",
     "progress",
@@ -1539,12 +1541,11 @@ requires = [
 
 [[package]]
 name = "selectr"
-version = "0.7.0"
+version = "0.8.0"
 source = "cran"
-raw_version = "0.7-0"
-url = "https://cran.r-project.org/src/contrib/selectr_0.7-0.tar.gz"
-checksum = "md5:f257e86783ca708e19ed52cdd49188c7"
-requires = ["R6"]
+raw_version = "0.8-0"
+url = "https://cran.r-project.org/src/contrib/selectr_0.8-0.tar.gz"
+checksum = "md5:06a8ec7b306aec30a99f3654c60d5f59"
 
 [[package]]
 name = "shape"
@@ -1853,23 +1854,23 @@ checksum = "md5:ecfcfd15db2d5a79c25b9514748762b5"
 
 [[package]]
 name = "visdat"
-version = "0.6.0"
+version = "0.6.1"
 source = "cran"
-raw_version = "0.6.0"
-url = "https://cran.r-project.org/src/contrib/visdat_0.6.0.tar.gz"
-checksum = "md5:645b1de71ea95fd8b3975e152e7d5976"
+raw_version = "0.6.1"
+url = "https://cran.r-project.org/src/contrib/visdat_0.6.1.tar.gz"
+checksum = "md5:721a2b379a45d8fbaf912158a599d059"
 requires = [
     "ggplot2",
     "tidyr",
     "dplyr",
     "purrr",
     "readr",
-    "magrittr",
     "tibble",
     "glue",
     "forcats",
     "cli",
     "scales",
+    "rlang",
 ]
 
 [[package]]
@@ -1927,11 +1928,11 @@ requires = [
 
 [[package]]
 name = "xfun"
-version = "0.61.0"
+version = "0.62.0"
 source = "cran"
-raw_version = "0.61"
-url = "https://cran.r-project.org/src/contrib/xfun_0.61.tar.gz"
-checksum = "md5:70130070c686204fb71dbf20c6c871ac"
+raw_version = "0.62"
+url = "https://cran.r-project.org/src/contrib/xfun_0.62.tar.gz"
+checksum = "md5:93bc01d797fcdf1e4014998e4c248bd7"
 
 [[package]]
 name = "xml2"
