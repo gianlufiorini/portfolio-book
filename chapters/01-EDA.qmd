@@ -190,7 +190,7 @@ osloairbnb <- osloairbnb|>
 
 Now, before creating dummy variables for the amenities, let us consider which amenities are most common. It would be sensible to only keep track of amenities that are not too rare but, at the same time, not so common that (almost) every accomodation has them: such features would not provide much information.
 
-To visualize the frequency of amenities across all accomodations, we will start with a word cloud, which is shown in @fig-wordcloud. From the wordcloud we can see some of the most common amenities. Considering them all would be very cumbersome and naive. For this analysis, we will focus on a selection of them which could reasonably be related to the price of an accomodation and/or may be influenced by the location of the airbnb.
+To visualize the frequency of amenities across all accomodations, we will start with a simple word cloud, shown in @fig-wordcloud. The purpose of this wordcloud is to help us understand what amenities are offered across listings, in a rough but quick way. Considering  all amenities would be cumbersome; furthermore, some amenities are likely to be provided by all accomodations but only be mentioned by part of the listings, or be mentioned using different wordings, (e.g. hot water or heating). For this analysis, we will thus focus only on a selection of amenities which could reasonably be related to the price of an accomodation and/or may be influenced by the location of the airbnb. If one were interested in other amenities, the code could be easily modified to take them into account.
 
 ```{r}
 #| label: fig-wordcloud
