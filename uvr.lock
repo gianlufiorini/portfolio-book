@@ -289,6 +289,14 @@ url = "https://cran.r-project.org/src/contrib/codetools_0.2-20.tar.gz"
 checksum = "md5:b6d2fb49c00a528b04f574892359aa55"
 
 [[package]]
+name = "colorspace"
+version = "2.1.4"
+source = "cran"
+raw_version = "2.1-4"
+url = "https://cran.r-project.org/src/contrib/colorspace_2.1-4.tar.gz"
+checksum = "md5:2b2d367a454e47b574db3839fd550e36"
+
+[[package]]
 name = "commonmark"
 version = "2.0.0"
 source = "cran"
@@ -556,6 +564,23 @@ requires = [
 ]
 
 [[package]]
+name = "ggwordcloud"
+version = "0.6.2"
+source = "cran"
+raw_version = "0.6.2"
+url = "https://cran.r-project.org/src/contrib/ggwordcloud_0.6.2.tar.gz"
+checksum = "md5:a10c84c635d64ba9de6ef08845c7bc23"
+requires = [
+    "ggplot2",
+    "gridtext",
+    "Rcpp",
+    "scales",
+    "colorspace",
+    "png",
+    "Rcpp",
+]
+
+[[package]]
 name = "glmnet"
 version = "5.1.0"
 source = "cran"
@@ -638,6 +663,25 @@ raw_version = "2.3.1"
 url = "https://cran.r-project.org/src/contrib/gridExtra_2.3.1.tar.gz"
 checksum = "md5:36945ab8dce4ece13c0b245541bd4785"
 requires = ["gtable"]
+
+[[package]]
+name = "gridtext"
+version = "0.1.6"
+source = "cran"
+raw_version = "0.1.6"
+url = "https://cran.r-project.org/src/contrib/gridtext_0.1.6.tar.gz"
+checksum = "md5:229798a9f48171b7b767f14bbbdf6807"
+requires = [
+    "curl",
+    "markdown",
+    "rlang",
+    "Rcpp",
+    "png",
+    "jpeg",
+    "stringr",
+    "xml2",
+    "Rcpp",
+]
 
 [[package]]
 name = "gt"
@@ -840,6 +884,14 @@ requires = [
     "ordinal",
     "tibble",
 ]
+
+[[package]]
+name = "jpeg"
+version = "0.1.11"
+source = "cran"
+raw_version = "0.1-11"
+url = "https://cran.r-project.org/src/contrib/jpeg_0.1-11.tar.gz"
+checksum = "md5:415c72850990d7889408dcfd29805613"
 
 [[package]]
 name = "jquerylib"
@@ -1159,6 +1211,21 @@ url = "https://cran.r-project.org/src/contrib/otel_0.2.0.tar.gz"
 checksum = "md5:cecd0f434a6327dcf5ca0bc2da494d06"
 
 [[package]]
+name = "paletteer"
+version = "1.7.0"
+source = "cran"
+raw_version = "1.7.0"
+url = "https://cran.r-project.org/src/contrib/paletteer_1.7.0.tar.gz"
+checksum = "md5:59f9ff864c7a4f38d7a79c1719403eb9"
+requires = [
+    "cli",
+    "prismatic",
+    "rematch2",
+    "rlang",
+    "rstudioapi",
+]
+
+[[package]]
 name = "pan"
 version = "2.0.0"
 source = "cran"
@@ -1228,12 +1295,29 @@ requires = [
 ]
 
 [[package]]
+name = "png"
+version = "0.1.9"
+source = "cran"
+raw_version = "0.1-9"
+url = "https://cran.r-project.org/src/contrib/png_0.1-9.tar.gz"
+checksum = "md5:1410f91d9ac052c15c6eea3bc1c89672"
+
+[[package]]
 name = "prettyunits"
 version = "1.2.0"
 source = "cran"
 raw_version = "1.2.0"
 url = "https://cran.r-project.org/src/contrib/prettyunits_1.2.0.tar.gz"
 checksum = "md5:2e2db8105f214b80d3d4254b8aabb255"
+
+[[package]]
+name = "prismatic"
+version = "1.1.2"
+source = "cran"
+raw_version = "1.1.2"
+url = "https://cran.r-project.org/src/contrib/prismatic_1.1.2.tar.gz"
+checksum = "md5:6b429cc6f779cd2bbbbdda70b74f3022"
+requires = ["farver"]
 
 [[package]]
 name = "processx"
@@ -1913,18 +1997,6 @@ source = "cran"
 raw_version = "3.0.3"
 url = "https://cran.r-project.org/src/contrib/withr_3.0.3.tar.gz"
 checksum = "md5:121bf3699aadb9d1b47d648964b934f8"
-
-[[package]]
-name = "wordcloud2"
-version = "0.2.1"
-source = "cran"
-raw_version = "0.2.1"
-url = "https://cran.r-project.org/src/contrib/wordcloud2_0.2.1.tar.gz"
-checksum = "md5:299071535412b7053ad6b9e221e47f9b"
-requires = [
-    "htmlwidgets",
-    "base64enc",
-]
 
 [[package]]
 name = "xfun"

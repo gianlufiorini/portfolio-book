@@ -3,15 +3,16 @@ name = "portfolio-book"
 
 [dependencies]
 ggmice = "*"
+ggwordcloud = "*"
 gt = "*"
 janitor = "*"
 mice = "*"
 naniar = "*"
+paletteer = "*"
 pins = "*"
 skimr = "*"
 tidyverse = "*"
 withr = "*"
-wordcloud2 = "*"
 
 [dependencies.uvr]
 git = "nbafrank/uvr-r"

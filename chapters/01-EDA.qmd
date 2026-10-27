@@ -198,6 +198,9 @@ To visualize the frequency of amenities across all accomodations, we will start 
 #| fig-width: 8
 #| fig-height: 12
 #| fig-cap: "Wordcloud of amenities. The size of the words is proportional to the percentage of homes having that amenity. Amenities present in over 90% of homes or in less than 10% of homes were excluded"
+#| warning: true
+
+withr::local_seed(1234)
 
 amenities_vec <- osloairbnb$amenities |> 
   str_to_lower() |> 
@@ -205,7 +208,6 @@ amenities_vec <- osloairbnb$amenities |>
   str_replace_all("[:punct:]+", " ") |> 
   str_replace_all("u([0-9a-fA-F]{4})", "") |>  #removing scraping artefacts
   str_trim()
-amenities_vec <- amenities_vec
 
 amenities_vec <- amenities_vec[amenities_vec != ""]
 
@@ -214,10 +216,11 @@ amenities_freqs <- (table(amenities_vec)/nrow(osloairbnb)) |> as_tibble() #For a
 #We remove amenities present in over 90% of apartments and in at least 5%
 amenities_freqs <- amenities_freqs[amenities_freqs$n <= .90 & amenities_freqs$n >= .1,]
 
-withr::with_seed(1234,
-  wordcloud2::wordcloud2(amenities_freqs, size = 0.5, rotateRatio = .5, minRotation = -pi/2, maxRotation = -pi/2)
-)
+ggwordcloud::ggwordcloud(words = amenities_freqs$amenities_vec, freq = amenities_freqs$n, min.freq = 0, scale=c(3.5,1),
+  colors = paletteer::paletteer_d("poisonfrogs::Amacero"))
 ```
+
+We will focus on the following amenities: bed linens, parking (absent/free/paid), pets allowed, bed linens, host greeting, outdoor dining area, private patio or balcony, bbq grill, long term stays allowed, and air conditioning. To that end, we will create a dummy variable for each amenity, for each listing.
 
 
 ## Plotting the story
