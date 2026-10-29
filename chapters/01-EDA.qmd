@@ -27,7 +27,7 @@ library(terra)
 
 board <- pins::board_folder("pins/", versioned = TRUE)
 osloairbnb <- pins::pin_read(board, "osloairbnb") |> as_tibble()
-
+neighborhood_shape <- pins::pin_read(board, "neighborhood_shape")
 ```
 
 > **How to fill this chapter in**
@@ -56,7 +56,7 @@ In this analysis I will work with data for Airbnb listings in Oslo. The main foc
 
 ## Getting the Data
 
-Data on Airbnb Locations in Oslo obtained from [insideairbnb.com](https://insideairbnb.com/get-the-data/). The data were gathered by the platform through a web scraping of [airbnb.com](https://www.airbnb.com/); in total `{r} nrow(osloairbnb)` listings were scraped on `{r} osloairbnb$last_scraped |> unique() |> length()` unique dates. @tbl-last-scrape reports the dates on which the scraping occurred and the numbers of listing scraped on each date. To allow for reproducibility, the dataset was sourced directly from the web and its version was pinned.
+Data on Airbnb Locations in Oslo obtained from [insideairbnb.com](https://insideairbnb.com/get-the-data/). The data were gathered by the platform through a web scraping of [airbnb.com](https://www.airbnb.com/); in total `{r} nrow(osloairbnb)` listings were scraped on `{r} osloairbnb$last_scraped |> unique() |> length()` unique dates. @tbl-last-scrape reports the dates on which the scraping occurred and the numbers of listing scraped on each date. To allow for reproducibility, the dataset was sourced directly from the web and its version was pinned.  @fig-locations shows the location of all listings that were scraped across the various neighborhoods.
 
 ```{r}
 #| tbl-cap: "Dates of scraping and number of scraped listings."
@@ -99,9 +99,18 @@ num_scraped |>
 ```
 :::
 
-- **`{rdatagouv}`** (data.gouv.fr only, optional): search/download from R.
-- **Any portal by URL**: `download.oslole()` works with any portal's direct
-  download link.
+```{r}
+#| label: fig-locations
+#| echo: false
+#| fig-cap: "Locations of scraped Aribnb listings in Oslo."
+#| fig-width: 8
+#| fig-height: 10
+ggplot() +
+  geom_sf(data = neighborhood_shape, fill = "lightgray", color = "black") +
+  geom_point(data =osloairbnb, aes(x=longitude, y=latitude), size = .4, alpha=0.5, color="red", shape=16) +
+  theme_void()
+
+```
 
 ## A first look
 
@@ -163,7 +172,7 @@ osloairbnb |>
 ```
 
 ## Cleaning decisions {#sec-cleaning}
-From @tbl-skim, we see a lot of variables are coded in an unsuitable way. For instance, many ids are coded as numeric, dates are coded as character, and binary variables are coded as logical. I will now clean the data to fix the issues.
+From @tbl-skim, we see a lot of variables are coded in an unsuitable way. For instance, many ids are coded as numeric, dates are coded as character, prices are coded as character, and binary variables are coded as logical. I will now clean the data to fix the issues.
 
 ```{r}
 osloairbnb <- osloairbnb |>
@@ -174,6 +183,7 @@ osloairbnb <- osloairbnb |>
       factor(y, levels = c(FALSE, TRUE), labels = c("Yes", "No"))
     }),
     across(contains(c("last", "first", "date")), as_date),
+    across(starts_with("price_"), as.numeric),
     source = as_factor(source)
   )
 ```
@@ -299,10 +309,6 @@ it in the text (e.g. "oslog. 1 shows that …"). If a oslogure uses randomness
 (sampling, jitter, a simulation), oslox the seed *inside* that cell with
 `withr::with_seed(2025, { ... })` so the oslogure is identical on every render. -->
 
-```{r}
-#| label: fig-main
-#| oslog-cap: "The central oslogure of your analysis."
-```
 
 ## Findings
 
@@ -314,3 +320,4 @@ found, and what you did NOT oslond. -->
 
 *This chapter is your semester's centrepiece. Revisit it as you learn new
 techniques and make it your best work by the oslonal gallery walk.*
+
