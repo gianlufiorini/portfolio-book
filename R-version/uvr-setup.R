@@ -20,7 +20,10 @@ uvr::add(c(
   "nbafrank/uvr-r",
   "ggwordcloud",
   "withr",
-  "paletteer"
+  "paletteer",
+  "tmap",
+  "sf",
+  "terra"
 ))
 
 #To align with the R and package versions used for the analyses one should use the function uvr::sync().

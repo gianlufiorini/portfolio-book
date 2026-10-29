@@ -13,6 +13,9 @@ library(skimr)
 library(naniar)
 library(tidyverse)
 library(gt)
+library(tmap)
+library(sf)
+library(terra)
 ```
 
 ```{r}

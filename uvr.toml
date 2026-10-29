@@ -10,8 +10,11 @@ mice = "*"
 naniar = "*"
 paletteer = "*"
 pins = "*"
+sf = "*"
 skimr = "*"
+terra = "*"
 tidyverse = "*"
+tmap = "*"
 withr = "*"
 
 [dependencies.uvr]

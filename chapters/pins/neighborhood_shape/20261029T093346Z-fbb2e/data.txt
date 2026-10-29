@@ -1,0 +1,10 @@
+file: neighborhood_shape.rds
+file_size: 25950
+pin_hash: fbb2e9880de7072a
+type: rds
+title: 'neighborhood_shape: a pinned 17 x 3 data frame'
+description: ~
+tags: ~
+urls: ~
+created: 20261029T093346Z
+api_version: 1
